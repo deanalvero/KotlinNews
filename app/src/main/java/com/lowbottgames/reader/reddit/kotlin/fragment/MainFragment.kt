@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.lowbottgames.reader.reddit.kotlin.R
 import com.lowbottgames.reader.reddit.kotlin.adapter.FeedAdapter
 import com.lowbottgames.reader.reddit.kotlin.database.KNDatabase
@@ -58,7 +59,14 @@ class MainFragment : Fragment() {
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.adapter = adapter
 
+        val swipeRefreshLayout: SwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
+        swipeRefreshLayout.setOnRefreshListener {
+            feedViewModel.loadKotlinFeed(true)
+        }
+
         feedViewModel.kotlinFeed.observe(this) {
+            swipeRefreshLayout.isRefreshing = false
+
             adapter.items = it
             adapter.notifyDataSetChanged()
         }
