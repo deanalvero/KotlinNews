@@ -4,6 +4,6 @@ import com.lowbottgames.reader.reddit.kotlin.model.Feed
 
 interface FeedRepository {
 
-    suspend fun kotlinFeed(isRefresh: Boolean) : List<Feed>?
+    suspend fun feed(name: String, isRefresh: Boolean) : List<Feed>?
 
 }

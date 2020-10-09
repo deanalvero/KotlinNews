@@ -61,17 +61,17 @@ class MainFragment : Fragment() {
 
         val swipeRefreshLayout: SwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
         swipeRefreshLayout.setOnRefreshListener {
-            feedViewModel.loadKotlinFeed(true)
+            feedViewModel.loadFeed("kotlin", true)
         }
 
-        feedViewModel.kotlinFeed.observe(this) {
+        feedViewModel.feed.observe(this) {
             swipeRefreshLayout.isRefreshing = false
 
             adapter.items = it
             adapter.notifyDataSetChanged()
         }
 
-        feedViewModel.loadKotlinFeed(false)
+        feedViewModel.loadFeed("kotlin", false)
     }
 
     override fun onAttach(context: Context) {

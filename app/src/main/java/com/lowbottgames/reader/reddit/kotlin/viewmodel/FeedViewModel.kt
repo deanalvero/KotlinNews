@@ -13,15 +13,15 @@ class FeedViewModel(
     private val repository: FeedRepository
 ) : ViewModel() {
 
-    private val _kotlinFeed = MutableLiveData<List<Feed>>()
+    private val _feed = MutableLiveData<List<Feed>>()
 
-    val kotlinFeed: LiveData<List<Feed>>
-        get() = _kotlinFeed
+    val feed: LiveData<List<Feed>>
+        get() = _feed
 
-    fun loadKotlinFeed(isRefresh: Boolean) = viewModelScope.launch(Dispatchers.IO) {
-        val feed = repository.kotlinFeed(isRefresh)
+    fun loadFeed(name: String, isRefresh: Boolean) = viewModelScope.launch(Dispatchers.IO) {
+        val feed = repository.feed(name, isRefresh)
         if (feed != null) {
-            _kotlinFeed.postValue(feed)
+            _feed.postValue(feed)
         }
     }
 

@@ -10,18 +10,18 @@ class FeedRepositoryImpl(
     private val service: ApiEndpoint
 ) : FeedRepository {
 
-    private var kotlinFeedCache: List<Feed>? = null
+    private var feedCache: List<Feed>? = null
 
-    override suspend fun kotlinFeed(isRefresh: Boolean): List<Feed>? {
-        var kotlinFeed: List<Feed>? = null
+    override suspend fun feed(name: String, isRefresh: Boolean): List<Feed>? {
+        var feed: List<Feed>? = null
 
         if (!isRefresh) {
-            kotlinFeed = kotlinFeedCache
+            feed = feedCache
         }
 
-        if (kotlinFeed == null && !isRefresh) {
+        if (feed == null && !isRefresh) {
             val feedEntity = database.databaseDao.getAll()
-            kotlinFeed = feedEntity.map { item ->
+            feed = feedEntity.map { item ->
                 Feed(
                     item.title,
                     item.author,
@@ -30,12 +30,12 @@ class FeedRepositoryImpl(
                     item.url
                 )
             }
-            kotlinFeedCache = kotlinFeed
+            feedCache = feed
         }
 
-        if (kotlinFeed == null || kotlinFeed.isEmpty()) {
-            val feedResponse = service.kotlinFeed()
-            kotlinFeed = feedResponse.data?.children?.mapNotNull {
+        if (feed == null || feed.isEmpty()) {
+            val feedResponse = service.feed(name)
+            feed = feedResponse.data?.children?.mapNotNull {
                 val item = it.data
                 if (item != null) {
                     database.databaseDao.insert(
@@ -60,9 +60,9 @@ class FeedRepositoryImpl(
                     null
                 }
             }
-            kotlinFeedCache = kotlinFeed
+            feedCache = feed
         }
-        return kotlinFeed
+        return feed
     }
 
 }

@@ -21,7 +21,7 @@ class LiveApiCallTest {
 
     @Test
     fun kotlinFeed_liveApiCall() = runBlocking {
-        val response = testee.kotlinFeed()
+        val response = testee.feed("kotlin")
         assertNotNull(response)
 
         val feedData = response.data
