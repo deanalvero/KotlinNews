@@ -13,18 +13,17 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.lowbottgames.reader.reddit.kotlin.R
 import com.lowbottgames.reader.reddit.kotlin.adapter.FeedAdapter
-import com.lowbottgames.reader.reddit.kotlin.database.KNDatabase
 import com.lowbottgames.reader.reddit.kotlin.model.Feed
-import com.lowbottgames.reader.reddit.kotlin.network.ApiEndpoint
-import com.lowbottgames.reader.reddit.kotlin.network.ServiceBuilder
-import com.lowbottgames.reader.reddit.kotlin.repository.FeedRepositoryImpl
+import com.lowbottgames.reader.reddit.kotlin.repository.FeedRepository
 import com.lowbottgames.reader.reddit.kotlin.viewmodel.FeedViewModel
 import com.lowbottgames.reader.reddit.kotlin.viewmodel.FeedViewModelFactory
+import org.koin.android.ext.android.inject
 
 class MainFragment : Fragment() {
 
     private lateinit var feedViewModel: FeedViewModel
     private var listener: OnFeedEventsListener? = null
+    private val repository: FeedRepository by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,10 +38,6 @@ class MainFragment : Fragment() {
 
         val toolbar: Toolbar = view.findViewById(R.id.toolbar)
         toolbar.title = getString(R.string.app_name)
-
-        val service = ServiceBuilder.buildService(ApiEndpoint::class.java)
-        val database = KNDatabase.getInstance(context!!.applicationContext)
-        val repository = FeedRepositoryImpl(database, service)
 
         feedViewModel = ViewModelProvider(
             this,
